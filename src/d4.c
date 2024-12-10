@@ -31,9 +31,10 @@ void get_length(char* buffer, dim_t* dim) {
     dim->len = char_count / dim->height;
 }
 
+// north
 int check_n(buf_t* buf, dim_t* dim) {
     int pos = buf->buffer - buf->start;
-    int lines_above = pos / dim->len;
+    int lines_above = pos / dim->len + 1;
 
     if (lines_above < xmas_len - 1) {
         return 0;
@@ -42,7 +43,28 @@ int check_n(buf_t* buf, dim_t* dim) {
     char * tmp_buf = buf->buffer;
     for (int i = 1; i < xmas_len; i++) {
         tmp_buf -= (dim->len + 1); // newline moment
-        printf("testing!! '%c' ", *tmp_buf);
+
+        if (*tmp_buf != xmas[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+// south
+int check_s(buf_t* buf, dim_t* dim) {
+    int pos = buf->buffer - buf->start;
+
+    int lines_below = dim->len - pos / dim->len + 1;
+
+    if (lines_below < xmas_len - 1) {
+        return 0;
+    }
+
+    char * tmp_buf = buf->buffer;
+    for (int i = 1; i < xmas_len; i++) {
+        tmp_buf += (dim->len + 1); // newline moment
 
         if (*tmp_buf != xmas[i]) {
             return 0;
@@ -55,10 +77,9 @@ int check_n(buf_t* buf, dim_t* dim) {
 // checks all directions returns num points
 int check_x(buf_t* buf, dim_t* dim) {
     int sum = 0;
-    printf("checking x at %c", *buf->buffer);
     // check n
     sum += check_n(buf, dim);
-    printf(" from n = %d", sum);
+    sum += check_s(buf, dim);
 
     // check
     // check
@@ -71,7 +92,6 @@ int check_x(buf_t* buf, dim_t* dim) {
 int get_count(buf_t* buf, dim_t* dim) {
     int sum = 0;
     while (*buf->buffer != '\0') {
-        printf(" test: %c\n", *buf->buffer);
         if (*buf->buffer == 'X') {
             sum += check_x(buf, dim);
         }
