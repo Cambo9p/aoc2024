@@ -74,12 +74,59 @@ int check_s(buf_t* buf, dim_t* dim) {
     return 1;
 }
 
+int check_e(buf_t* buf, dim_t* dim) {
+    int pos = buf->buffer - buf->start;
+
+    //int lines_above = pos / dim->len + 1;
+    int lines_right = dim->len - (pos % dim->len);
+
+    if (lines_right < xmas_len - 1) {
+        return 0;
+    }
+
+    char * tmp_buf = buf->buffer;
+    for (int i = 1; i < xmas_len; i++) {
+        tmp_buf += 1;
+
+        if (*tmp_buf != xmas[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+// west
+int check_w(buf_t* buf, dim_t* dim) {
+    int pos = buf->buffer - buf->start;
+
+    //int lines_above = pos / dim->len + 1;
+    int lines_right = pos % dim->len;
+
+    if (lines_right < xmas_len - 1) {
+        return 0;
+    }
+
+    char * tmp_buf = buf->buffer;
+    for (int i = 1; i < xmas_len; i++) {
+        tmp_buf -= 1;
+
+        if (*tmp_buf != xmas[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 // checks all directions returns num points
 int check_x(buf_t* buf, dim_t* dim) {
     int sum = 0;
     // check n
     sum += check_n(buf, dim);
     sum += check_s(buf, dim);
+    sum += check_e(buf, dim);
+    sum += check_w(buf, dim);
 
     // check
     // check
