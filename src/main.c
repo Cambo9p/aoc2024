@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "d3.c"
+#include "d4.c"
 
 #define BUFSIZE 1000000
 
@@ -15,7 +15,7 @@ int main() {
 
     size_t len = read_file(filename, BUFSIZE, buffer);
 
-    solve_p2(buffer, len);
+    solve_p1(buffer, len);
 
     free(buffer);
     return 0;
