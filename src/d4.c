@@ -101,9 +101,9 @@ int check_w(buf_t* buf, dim_t* dim) {
     int pos = buf->buffer - buf->start;
 
     //int lines_above = pos / dim->len + 1;
-    int lines_right = pos % dim->len;
+    int lines_left = pos % dim->len;
 
-    if (lines_right < xmas_len - 1) {
+    if (lines_left < xmas_len - 1) {
         return 0;
     }
 
