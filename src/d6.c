@@ -21,8 +21,10 @@ typedef struct {
 } buf_t;
 
 void get_pos_from_num(buf_t buf, int pos, int *x, int* y) {
+    printf("len = %d\n", buf.dim->len);
+    printf("height = %d\n", buf.dim->height);
     *x = (pos % buf.dim->len);
-    *y = (pos / buf.dim->height) - 1;
+    *y = (pos / buf.dim->height);
 }
 
 char get_char_at_xy(buf_t buf, int x, int y) {
@@ -88,7 +90,6 @@ void update_board_after_move(buf_t *buf, DIRECTION d, int *x, int *y) {
     update_buf_at_xy(buf, *x, *y, 'X');
     switch (d) {
         case UP:
-            *(buf->buffer - buf->dim->len) = '^';
             *y-=1;
             update_buf_at_xy(buf, *x, *y, '^');
             break;
@@ -106,7 +107,7 @@ void update_board_after_move(buf_t *buf, DIRECTION d, int *x, int *y) {
             break;
     }
     printf("after the move:\n");
-    printf("%s\n", buf->buffer);
+    //printf("%s\n", buf->buffer);
 }
 
 int check_room(buf_t *buf, DIRECTION *d, int x, int y) {
@@ -129,8 +130,9 @@ int check_room(buf_t *buf, DIRECTION *d, int x, int y) {
             can_move = x - 1 >= 0;
             break;
         default:
-            printf("got %c\n", *buf->buffer);
             printf("%s\n", buf->buffer);
+            printf("got %c at x %d y %d\n", *buf->buffer, x, y);
+
             perror("unexpected symbol");
             exit(0);
     }
@@ -192,7 +194,7 @@ int move(buf_t *buf, int *x, int *y) {
 
 int count_x(buf_t* buf) {
     printf("counting\n");
-    printf("%s\n", buf->buffer);
+    //printf("%s\n", buf->buffer);
     int count = 0;
 
     while (*buf->start != '\0') {
@@ -224,6 +226,7 @@ void solve_p1(char* buffer, size_t len) {
     
     get_pos_from_num(*buf, start_pos, &x , &y);
     printf("%c\n", get_char_at_xy(*buf, x, y));
+    printf("start x %d y %d\n", x, y);
     printf("starting buf = %c\n", *buf->buffer);
 
     printf("the ans is %d\n", process_route(buf, x, y));
